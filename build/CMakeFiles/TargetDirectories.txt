@@ -1,0 +1,3 @@
+/home/diego/Desktop/Egatos/tarea2/eda_cpp/laberinto/build/CMakeFiles/rebuild_cache.dir
+/home/diego/Desktop/Egatos/tarea2/eda_cpp/laberinto/build/CMakeFiles/edit_cache.dir
+/home/diego/Desktop/Egatos/tarea2/eda_cpp/laberinto/build/CMakeFiles/test.dir
