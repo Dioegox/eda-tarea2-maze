@@ -134,44 +134,53 @@ void Maze::print(){
 
 
 void Maze::print_solved(Cords* solution){
-    char LIMIT = '=';
-    int flg = 0;
-    std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
-    std::cout << " ";
-    for (int j = 0; j < width; j++){
-        std::cout << LIMIT;
-    }
-    std::cout << " ";
-    std::cout << std::endl;
-    for (int i = 0; i < height; i++){
-        std::cout << "|";
-        for (int j = 0; j < width; j++){
-            flg=0;
-            for (int k = 0; k < width; k++){
-                if (solution[k].x == i && solution[k].y == j){
-                    std::cout << 'x';
-                    flg = 1;
-                }
-            }
-            if (flg==0){
-                if (grid[i][j] == 0) {
-                    std::cout << EMPTY;
-                }
-                else {
-                    std::cout << WALL;
+	if (!solution[0].x){
+		std::cout << " Laberinto sin solucion" << std::endl;
+	}
+	else{
+		char LIMIT = '=';
+		int is = 0;
+		std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
+		std::cout << " ";
+		for (int j = 0; j < width; j++){
+			std::cout << LIMIT;
+		}
+		std::cout << " ";
+		std::cout << std::endl;
+		for (int i = 0; i < height; i++){
+			std::cout << "|";
+			for (int j = 0; j < width; j++){
+				if (grid[i][j] == 0) {
+					is = 0;
+					for (int k = 1; k < solution[0].x +1; k++){
+						if (solution[k].y == i){
+							if (solution[k].x == j){
+								is = 1;
+							}
+						}
+					}
+					if (is){
+						std::cout << "x";
+					}
+					else {
+						std::cout << EMPTY;
+					}
+				}
+				else {
+					std::cout << WALL;
+				}
+			}
+			std::cout << "|";
+			std::cout << std::endl;
+		}
+		std::cout << " ";
+		for (int j = 0; j < width; j++){
+			std::cout << LIMIT;
+		}
+		std::cout << " ";
+		std::cout << std::endl;
+	}
 
-                }
-            }
-        }
-        std::cout << "|";
-        std::cout << std::endl;
-    }
-    std::cout << " ";
-    for (int j = 0; j < width; j++){
-        std::cout << LIMIT;
-    }
-    std::cout << " ";
-    std::cout << std::endl;
 }
 
 Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
@@ -181,7 +190,6 @@ Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
 
 Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 	std::stack<Cords> pila_solucion;
-	grid[21][height];
 	int finish = 1;
 	int counter = 0;
 	int counter_ran;
@@ -205,10 +213,8 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 	}
 
 	while(finish){
-		std::cout << "x: " << cordenada_actual.x << std::endl;
-		std::cout << "y: " << cordenada_actual.y << std::endl;
 		//revisa que no sea el final
-		if (cordenada_actual.x == f2 && cordenada_actual.y == c2){
+		if (cordenada_actual.x == f2-1 && cordenada_actual.y == c2-1){
 			visitados[counter] = cordenada_actual;
 			pila_solucion.push(cordenada_actual);
 			finish = 0;
@@ -249,7 +255,7 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 				}
 			}
 
-			if (cordenada_actual.x < width){
+			if (cordenada_actual.x < width - 1){
 				cordenada_revisar.x = cordenada_actual.x + 1;
 				cordenada_revisar.y = cordenada_actual.y;
 				if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
@@ -281,11 +287,10 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 				}
 			}
 
-			if (cordenada_actual.y < height){
+			if (cordenada_actual.y < height - 1){
 				cordenada_revisar.x = cordenada_actual.x;
 				cordenada_revisar.y = cordenada_actual.y + 1;
-				std::cout << "aqui: "<< cordenada_actual.y + 1 << std::endl;
-			if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
+				if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
 					visitado = 0;
 					for (int i=0;i<total;i++){
 						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
@@ -347,10 +352,10 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 	}
 
 	int sizec = pila_solucion.size();
-    std::cout << sizec << std::endl;
-    Cords* respuesta = new Cords[sizec];
-    for (int i = 0; i< sizec; i++){
-        std::cout << pila_solucion.top().x << "," << pila_solucion.top().y << std::endl;
+    Cords* respuesta = new Cords[sizec + 1];
+	cordenada_actual.x = sizec;
+	respuesta[0] = cordenada_actual;
+    for (int i = 1; i< sizec+1; i++){
         respuesta[i] = pila_solucion.top();
         pila_solucion.pop();
     }
