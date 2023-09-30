@@ -9,6 +9,7 @@ namespace maze{
 
 const unsigned char Maze::WALL  = '@';
 const unsigned char Maze::EMPTY = '-';
+const unsigned char Maze::PATH  = 'x';
 const int Maze::NORTH= 0;
 const int Maze::SOUTH= 1;
 const int Maze::EAST= 2;
@@ -136,6 +137,33 @@ void Maze::print(){
 void Maze::print_solved(Cords* solution){
     char LIMIT = '=';
     int flg = 0;
+	int flg2=0;
+	int al = 90;
+	auto templ = new uchar*[height];
+	for (int i = 0; i < height; i++){
+		templ[i] = new uchar[width];
+		for (int j = 0; j < width; j++){
+			flg = 0;
+			for (int k = 0; k < 100; k++){
+				if (solution[k].x == j && solution[k].y == i){
+					templ[i][j] = 'u';
+					flg = 1;
+				}
+			}
+			if (flg == 0){
+				templ[i][j] = 'N';}
+		}
+	}
+	std::cout <<" map lista of "<< std::endl;
+	for (int i = 0; i < height; i++){
+		for (int j = 0; j < width; j++){
+			std::cout << templ[i][j];
+		}
+		std::cout << std::endl;	
+	}
+
+
+	std::cout << "max lenght = "<< al << std::endl;
     std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
     std::cout << " ";
     for (int j = 0; j < width; j++){
@@ -143,19 +171,24 @@ void Maze::print_solved(Cords* solution){
     }
     std::cout << " ";
     std::cout << std::endl;
+	/* for (int i= 0; i< 60; i++){
+		std::cout << solution[i].x << "," << solution[i].y << std::endl;
+	} */
     for (int i = 0; i < height; i++){
         std::cout << "|";
         for (int j = 0; j < width; j++){
+			
             flg=0;
-            for (int k = 0; k < width; k++){
-                if (solution[k].x == i && solution[k].y == j){
-                    std::cout << 'x';
-                    flg = 1;
-                }
-            }
+
+			if(templ[i][j] == 'u'){
+				flg=1;
+				grid[i][j] = PATH;
+			}
+
             if (flg==0){
                 if (grid[i][j] == 0) {
-                    std::cout << EMPTY;
+					std::cout << EMPTY;
+			
                 }
                 else {
                     std::cout << WALL;
@@ -209,8 +242,8 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 		if (counter > 100){
 			finish = 0;
 		}
-		std::cout << "x: " << cordenada_actual.x << std::endl;
-		std::cout << "y: " << cordenada_actual.y << std::endl;
+		//std::cout << "x: " << cordenada_actual.x << std::endl;
+		//std::cout << "y: " << cordenada_actual.y << std::endl;
 		//revisa que no sea el final
 		if (cordenada_actual.x == f2 && cordenada_actual.x == c2){
 			finish = 0;
@@ -233,7 +266,7 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 				visitados[counter] = cordenada_actual;
 				pila_solucion.push(cordenada_actual);
 			}
-			std::cout << "visitado: " << visitado << std::endl;
+			//std::cout << "visitado: " << visitado << std::endl;
 
 			//revisa si las cordenadas adjacentes son empty y no esten revisadas
 			if (cordenada_actual.x > 0){
@@ -314,24 +347,24 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 				counter_ran2 = 0;
 				for (int i = 0; i < 4; i++){
 					if (revisados[i] == 1){
-						std::cout << "xd" << i << std::endl;
+						//std::cout << "xd" << i << std::endl;
 						counter_ran2 ++;
 						if(counter_ran2 == random){
 							if(i == 0){
 								cordenada_actual.x = cordenada_actual.x - 1;
-								std::cout << "fallatodo" << std::endl;
+								//std::cout << "fallatodo" << std::endl;
 							}
 							else if(i == 1){
 								cordenada_actual.x = cordenada_actual.x + 1;
-								std::cout << "fallatodo1" << std::endl;
+								//std::cout << "fallatodo1" << std::endl;
 							}
 							else if(i == 2){
 								cordenada_actual.y = cordenada_actual.y - 1;
-								std::cout << "fallatodo2" << std::endl;
+								//std::cout << "fallatodo2" << std::endl;
 							}
 							else{
 								cordenada_actual.y = cordenada_actual.y + 1;
-								std::cout << "fallatodo3" << std::endl;
+								//std::cout << "fallatodo3" << std::endl;
 							}
 						}
 					}
@@ -358,7 +391,7 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
     std::cout << sizec << std::endl;
     Cords* respuesta = new Cords[sizec];
     for (int i = 0; i< sizec; i++){
-        std::cout << pila_solucion.top().x << "," << pila_solucion.top().y << std::endl;
+        //std::cout << pila_solucion.top().x << "," << pila_solucion.top().y << std::endl;
         respuesta[i] = pila_solucion.top();
         pila_solucion.pop();
     }

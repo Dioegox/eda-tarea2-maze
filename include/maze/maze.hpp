@@ -22,6 +22,7 @@ namespace maze {
 	public:
 		static const unsigned char WALL;
 		static const unsigned char EMPTY;
+		static const unsigned char PATH;
 		static const int NORTH;
 		static const int SOUTH;
 		static const int EAST;
