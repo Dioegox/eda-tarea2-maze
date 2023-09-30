@@ -133,7 +133,7 @@ void Maze::print(){
 }
 
 
-void Maze::print_solved(uchar** solution){
+void Maze::print_solved(Cords* solution){
 	char LIMIT = '=';
 	std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
 	std::cout << " ";
@@ -145,11 +145,18 @@ void Maze::print_solved(uchar** solution){
 	for (int i = 0; i < height; i++){
 		std::cout << "|";
 		for (int j = 0; j < width; j++){
-			if (grid[i][j] == 0) {
-				std::cout << EMPTY;
-			}
-			else {
-				std::cout << WALL;
+			for (int k = 0; k < width; k++){
+				if (solution[k].x == i && solution[k].y == j){
+					std::cout << 'x';
+				}
+				else{
+					if (grid[i][j] == 0) {
+						std::cout << EMPTY;
+					}
+					else {
+						std::cout << WALL;
+					}
+				}
 			}
 		}
 		std::cout << "|";
@@ -163,17 +170,185 @@ void Maze::print_solved(uchar** solution){
 	std::cout << std::endl;
 }
 
-int Maze::solve_cola(int f1, int c1, int f2, int c2){
-
-	return 0;
-}
-
-
-
-
-int Maze::solve_pila(int f1, int c1, int f2, int c2){
+Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
 	
 	return 0;
 }
-}
 
+Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
+	std::stack<Cords> pila_solucion;
+
+	int finish = 1;
+	int counter = 0;
+	int counter_ran;
+	int counter_ran2;
+	int random;
+	int visitado;
+	int revisados[4];
+	int total = height*width;
+
+	Cords cordenada_actual;
+	cordenada_actual.x = f1;
+  	cordenada_actual.y = c1;
+
+	Cords cordenada_revisar;
+	cordenada_revisar.x = -1;
+  	cordenada_revisar.y = -1;
+
+	Cords visitados[total];
+	for (int i=0;i<total;i++){
+		visitados[i] = cordenada_revisar;
+	}
+
+
+	while(finish){
+		//revisa que no sea el final
+		if (cordenada_actual.x == f2 && cordenada_actual.x == c2){
+			finish = 0;
+		}
+
+		else{
+			revisados[0] = 0;
+			revisados[1] = 0;
+			revisados[2] = 0;
+			revisados[3] = 0;
+
+			//revisa que sea un nodo nuevo
+			visitado = 0;
+			for (int i=0;i<total;i++){
+				if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+					visitado = 1;
+				}
+			}
+			if (visitado == 0){
+				visitados[counter] = cordenada_actual;
+				pila_solucion.push(cordenada_actual);
+			}
+
+			//revisa si las cordenadas adjacentes son empty y no esten revisadas
+			if (cordenada_actual.x > 0){
+				cordenada_revisar.x = cordenada_actual.x - 1;
+				cordenada_revisar.y = cordenada_actual.y;
+				if (grid[cordenada_revisar.x][cordenada_revisar.y] == 0) {
+					visitado = 0;
+					for (int i=0;i<total;i++){
+						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+							visitado = 1;
+						}
+					}
+					if (visitado == 0){
+						revisados[0] = 1;
+					}
+				}
+			}
+
+			if (cordenada_actual.x < width){
+				cordenada_revisar.x = cordenada_actual.x + 1;
+				cordenada_revisar.y = cordenada_actual.y;
+				if (grid[cordenada_revisar.x][cordenada_revisar.y] == 0) {
+					visitado = 0;
+					for (int i=0;i<total;i++){
+						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+							visitado = 1;
+						}
+					}
+					if (visitado == 0){
+						revisados[1] = 1;
+					}
+				}
+			}
+
+			if (cordenada_actual.y > 0){
+				cordenada_revisar.x = cordenada_actual.x;
+				cordenada_revisar.y = cordenada_actual.y - 1;
+				if (grid[cordenada_revisar.x][cordenada_revisar.y] == 0) {
+					visitado = 0;
+					for (int i=0;i<total;i++){
+						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+							visitado = 1;
+						}
+					}
+					if (visitado == 0){
+						revisados[2] = 1;
+					}
+				}
+			}
+
+			if (cordenada_actual.y < height){
+				cordenada_revisar.x = cordenada_actual.x;
+				cordenada_revisar.y = cordenada_actual.y + 1;
+				if (grid[cordenada_revisar.x][cordenada_revisar.y] == 0) {
+					visitado = 0;
+					for (int i=0;i<total;i++){
+						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+							visitado = 1;
+						}
+					}
+					if (visitado == 0){
+						revisados[3] = 1;
+					}
+				}
+			}
+
+			// ejecuta si alguna coordenada adjacente esta empty y no revisada, y elige aleatoriamente uno de los adjacentes
+			if (revisados[0] == 1 || revisados[1] == 1 || revisados[2] == 1 || revisados[3] == 1){
+				counter_ran = -1;
+				for (int i = 0; i < 4; i++){
+					if (revisados[i] == 1){
+						counter_ran ++;
+					}
+	 			}
+				random = std::rand() & counter_ran;
+				random ++;
+				counter_ran2 = 0;
+				for (int i = 0; i < counter_ran+1; i++){
+					if (revisados[i] == 1){
+						counter_ran2 ++;
+						if(counter_ran2 == random){
+							if(i == 0){
+								cordenada_revisar.x = cordenada_actual.x - 1;
+								cordenada_revisar.y = cordenada_actual.y;
+							}
+							else if(i == 1){
+								cordenada_revisar.x = cordenada_actual.x + 1;
+								cordenada_revisar.y = cordenada_actual.y;
+							}
+							else if(i == 2){
+								cordenada_revisar.x = cordenada_actual.x;
+								cordenada_revisar.y = cordenada_actual.y - 1;
+							}
+							else{
+								cordenada_revisar.x = cordenada_actual.x;
+								cordenada_revisar.y = cordenada_actual.y + 1;
+							}
+						}
+					}
+	 			}
+
+			}
+			
+			// popea porque esta en un lugar sin salida
+			else {
+				pila_solucion.pop();
+				if (pila_solucion.empty()){
+					finish = 0;
+				}
+				else{
+					cordenada_actual = pila_solucion.top();
+				}
+			}
+
+			counter ++;
+		}
+	}
+
+	int sizec = pila_solucion.size();
+	Cords* respuesta = new Cords[sizec];
+	for (int i = 0; i< sizec; i++){
+		respuesta[i] = pila_solucion.top();
+		pila_solucion.pop();
+	}
+
+	return respuesta;
+}
+}

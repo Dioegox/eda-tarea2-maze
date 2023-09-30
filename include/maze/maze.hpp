@@ -1,6 +1,10 @@
 /**
  * Classe Maze
  */
+struct Cords {
+  int x;
+  int y;
+};
 
 namespace maze {
 	typedef unsigned char uchar;
@@ -27,9 +31,11 @@ namespace maze {
 		void reset_maze(int h, int w);
 		bool inRange(int i, int j);
 		void print();
-		void print_solved(uchar** solution);
-		int solve_pila(int f1, int c1, int f2, int c2);
-		int solve_cola(int f1, int c1, int f2, int c2);
+		void print_solved(Cords* solution);
+		Cords* solve_pila(int f1, int c1, int f2, int c2);
+		Cords* solve_cola(int f1, int c1, int f2, int c2);
 
 	};
 }
+
+
