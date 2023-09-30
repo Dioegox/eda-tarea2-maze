@@ -181,7 +181,7 @@ Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
 
 Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 	std::stack<Cords> pila_solucion;
-
+	grid[21][height];
 	int finish = 1;
 	int counter = 0;
 	int counter_ran;
@@ -204,15 +204,13 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 		visitados[i] = cordenada_revisar;
 	}
 
-
 	while(finish){
-		if (counter > 100){
-			finish = 0;
-		}
 		std::cout << "x: " << cordenada_actual.x << std::endl;
 		std::cout << "y: " << cordenada_actual.y << std::endl;
 		//revisa que no sea el final
-		if (cordenada_actual.x == f2 && cordenada_actual.x == c2){
+		if (cordenada_actual.x == f2 && cordenada_actual.y == c2){
+			visitados[counter] = cordenada_actual;
+			pila_solucion.push(cordenada_actual);
 			finish = 0;
 		}
 
@@ -233,7 +231,6 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 				visitados[counter] = cordenada_actual;
 				pila_solucion.push(cordenada_actual);
 			}
-			std::cout << "visitado: " << visitado << std::endl;
 
 			//revisa si las cordenadas adjacentes son empty y no esten revisadas
 			if (cordenada_actual.x > 0){
@@ -287,7 +284,8 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 			if (cordenada_actual.y < height){
 				cordenada_revisar.x = cordenada_actual.x;
 				cordenada_revisar.y = cordenada_actual.y + 1;
-				if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
+				std::cout << "aqui: "<< cordenada_actual.y + 1 << std::endl;
+			if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
 					visitado = 0;
 					for (int i=0;i<total;i++){
 						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
@@ -309,29 +307,23 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					}
 	 			}
 				random = std::rand() & counter_ran;
-				counter_ran ++;
 				random ++;
 				counter_ran2 = 0;
 				for (int i = 0; i < 4; i++){
 					if (revisados[i] == 1){
-						std::cout << "xd" << i << std::endl;
 						counter_ran2 ++;
 						if(counter_ran2 == random){
 							if(i == 0){
 								cordenada_actual.x = cordenada_actual.x - 1;
-								std::cout << "fallatodo" << std::endl;
 							}
 							else if(i == 1){
 								cordenada_actual.x = cordenada_actual.x + 1;
-								std::cout << "fallatodo1" << std::endl;
 							}
 							else if(i == 2){
 								cordenada_actual.y = cordenada_actual.y - 1;
-								std::cout << "fallatodo2" << std::endl;
 							}
 							else{
 								cordenada_actual.y = cordenada_actual.y + 1;
-								std::cout << "fallatodo3" << std::endl;
 							}
 						}
 					}

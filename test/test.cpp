@@ -8,7 +8,7 @@ int main(int nargs, char** vargs){
 	laberinto.print();
 	Cords* ponter = laberinto.solve_pila(0,0,21,21);
 	//laberinto.print_solved(ponter);
-	laberinto.solve_cola(0,0,21,21);
+	//laberinto.solve_cola(0,0,21,21);
 	laberinto.print();
 
 
