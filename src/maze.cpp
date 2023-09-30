@@ -249,7 +249,6 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					if (visitado == 0){
 						revisados[0] = 1;
 					}
-					std::cout << "xd" << std::endl;
 				}
 			}
 
@@ -266,7 +265,6 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					if (visitado == 0){
 						revisados[1] = 1;
 					}
-					std::cout << "xd1" << std::endl;
 				}
 			}
 
@@ -283,7 +281,6 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					if (visitado == 0){
 						revisados[2] = 1;
 					}
-					std::cout << "xd2" << std::endl;
 				}
 			}
 
@@ -300,7 +297,6 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					if (visitado == 0){
 						revisados[3] = 1;
 					}
-					std::cout << "xd3" << std::endl;
 				}
 			}
 
@@ -313,23 +309,29 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					}
 	 			}
 				random = std::rand() & counter_ran;
+				counter_ran ++;
 				random ++;
 				counter_ran2 = 0;
-				for (int i = 0; i < counter_ran+1; i++){
+				for (int i = 0; i < 4; i++){
 					if (revisados[i] == 1){
+						std::cout << "xd" << i << std::endl;
 						counter_ran2 ++;
 						if(counter_ran2 == random){
 							if(i == 0){
 								cordenada_actual.x = cordenada_actual.x - 1;
+								std::cout << "fallatodo" << std::endl;
 							}
 							else if(i == 1){
 								cordenada_actual.x = cordenada_actual.x + 1;
+								std::cout << "fallatodo1" << std::endl;
 							}
 							else if(i == 2){
 								cordenada_actual.y = cordenada_actual.y - 1;
+								std::cout << "fallatodo2" << std::endl;
 							}
 							else{
 								cordenada_actual.y = cordenada_actual.y + 1;
+								std::cout << "fallatodo3" << std::endl;
 							}
 						}
 					}
