@@ -134,40 +134,44 @@ void Maze::print(){
 
 
 void Maze::print_solved(Cords* solution){
-	char LIMIT = '=';
-	std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
-	std::cout << " ";
-	for (int j = 0; j < width; j++){
-		std::cout << LIMIT;
-	}
-	std::cout << " ";
-	std::cout << std::endl;
-	for (int i = 0; i < height; i++){
-		std::cout << "|";
-		for (int j = 0; j < width; j++){
-			for (int k = 0; k < width; k++){
-				if (solution[k].x == i && solution[k].y == j){
-					std::cout << 'x';
-				}
-				else{
-					if (grid[i][j] == 0) {
-						std::cout << EMPTY;
-					}
-					else {
-						std::cout << WALL;
-					}
-				}
-			}
-		}
-		std::cout << "|";
-		std::cout << std::endl;
-	}
-	std::cout << " ";
-	for (int j = 0; j < width; j++){
-		std::cout << LIMIT;
-	}
-	std::cout << " ";
-	std::cout << std::endl;
+    char LIMIT = '=';
+    int flg = 0;
+    std::cout << " Maze ( "<< height << " x " << width << " ) " << std::endl;
+    std::cout << " ";
+    for (int j = 0; j < width; j++){
+        std::cout << LIMIT;
+    }
+    std::cout << " ";
+    std::cout << std::endl;
+    for (int i = 0; i < height; i++){
+        std::cout << "|";
+        for (int j = 0; j < width; j++){
+            flg=0;
+            for (int k = 0; k < width; k++){
+                if (solution[k].x == i && solution[k].y == j){
+                    std::cout << 'x';
+                    flg = 1;
+                }
+            }
+            if (flg==0){
+                if (grid[i][j] == 0) {
+                    std::cout << EMPTY;
+                }
+                else {
+                    std::cout << WALL;
+
+                }
+            }
+        }
+        std::cout << "|";
+        std::cout << std::endl;
+    }
+    std::cout << " ";
+    for (int j = 0; j < width; j++){
+        std::cout << LIMIT;
+    }
+    std::cout << " ";
+    std::cout << std::endl;
 }
 
 Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
@@ -202,6 +206,11 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 
 
 	while(finish){
+		if (counter > 100){
+			finish = 0;
+		}
+		std::cout << "x: " << cordenada_actual.x << std::endl;
+		std::cout << "y: " << cordenada_actual.y << std::endl;
 		//revisa que no sea el final
 		if (cordenada_actual.x == f2 && cordenada_actual.x == c2){
 			finish = 0;
@@ -216,7 +225,7 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 			//revisa que sea un nodo nuevo
 			visitado = 0;
 			for (int i=0;i<total;i++){
-				if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+				if (visitados[i].x == cordenada_actual.x && visitados[i].y == cordenada_actual.y){
 					visitado = 1;
 				}
 			}
@@ -224,12 +233,13 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 				visitados[counter] = cordenada_actual;
 				pila_solucion.push(cordenada_actual);
 			}
+			std::cout << "visitado: " << visitado << std::endl;
 
 			//revisa si las cordenadas adjacentes son empty y no esten revisadas
 			if (cordenada_actual.x > 0){
 				cordenada_revisar.x = cordenada_actual.x - 1;
 				cordenada_revisar.y = cordenada_actual.y;
-				if (grid[cordenada_revisar.x][cordenada_revisar.y] == 0) {
+				if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
 					visitado = 0;
 					for (int i=0;i<total;i++){
 						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
@@ -239,13 +249,14 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					if (visitado == 0){
 						revisados[0] = 1;
 					}
+					std::cout << "xd" << std::endl;
 				}
 			}
 
 			if (cordenada_actual.x < width){
 				cordenada_revisar.x = cordenada_actual.x + 1;
 				cordenada_revisar.y = cordenada_actual.y;
-				if (grid[cordenada_revisar.x][cordenada_revisar.y] == 0) {
+				if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
 					visitado = 0;
 					for (int i=0;i<total;i++){
 						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
@@ -255,13 +266,14 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					if (visitado == 0){
 						revisados[1] = 1;
 					}
+					std::cout << "xd1" << std::endl;
 				}
 			}
 
 			if (cordenada_actual.y > 0){
 				cordenada_revisar.x = cordenada_actual.x;
 				cordenada_revisar.y = cordenada_actual.y - 1;
-				if (grid[cordenada_revisar.x][cordenada_revisar.y] == 0) {
+				if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
 					visitado = 0;
 					for (int i=0;i<total;i++){
 						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
@@ -271,13 +283,14 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					if (visitado == 0){
 						revisados[2] = 1;
 					}
+					std::cout << "xd2" << std::endl;
 				}
 			}
 
 			if (cordenada_actual.y < height){
 				cordenada_revisar.x = cordenada_actual.x;
 				cordenada_revisar.y = cordenada_actual.y + 1;
-				if (grid[cordenada_revisar.x][cordenada_revisar.y] == 0) {
+				if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
 					visitado = 0;
 					for (int i=0;i<total;i++){
 						if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
@@ -287,6 +300,7 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 					if (visitado == 0){
 						revisados[3] = 1;
 					}
+					std::cout << "xd3" << std::endl;
 				}
 			}
 
@@ -306,20 +320,16 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 						counter_ran2 ++;
 						if(counter_ran2 == random){
 							if(i == 0){
-								cordenada_revisar.x = cordenada_actual.x - 1;
-								cordenada_revisar.y = cordenada_actual.y;
+								cordenada_actual.x = cordenada_actual.x - 1;
 							}
 							else if(i == 1){
-								cordenada_revisar.x = cordenada_actual.x + 1;
-								cordenada_revisar.y = cordenada_actual.y;
+								cordenada_actual.x = cordenada_actual.x + 1;
 							}
 							else if(i == 2){
-								cordenada_revisar.x = cordenada_actual.x;
-								cordenada_revisar.y = cordenada_actual.y - 1;
+								cordenada_actual.y = cordenada_actual.y - 1;
 							}
 							else{
-								cordenada_revisar.x = cordenada_actual.x;
-								cordenada_revisar.y = cordenada_actual.y + 1;
+								cordenada_actual.y = cordenada_actual.y + 1;
 							}
 						}
 					}
@@ -343,11 +353,13 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
 	}
 
 	int sizec = pila_solucion.size();
-	Cords* respuesta = new Cords[sizec];
-	for (int i = 0; i< sizec; i++){
-		respuesta[i] = pila_solucion.top();
-		pila_solucion.pop();
-	}
+    std::cout << sizec << std::endl;
+    Cords* respuesta = new Cords[sizec];
+    for (int i = 0; i< sizec; i++){
+        std::cout << pila_solucion.top().x << "," << pila_solucion.top().y << std::endl;
+        respuesta[i] = pila_solucion.top();
+        pila_solucion.pop();
+    }
 
 	return respuesta;
 }
