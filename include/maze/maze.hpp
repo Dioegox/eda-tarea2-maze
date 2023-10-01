@@ -32,6 +32,7 @@ namespace maze {
 		bool inRange(int i, int j);
 		void print();
 		void print_solved(Cords* solution);
+		void shuffle(int arr[], int size);
 		Cords* solve_pila(int f1, int c1, int f2, int c2);
 		Cords* solve_cola(int f1, int c1, int f2, int c2);
 

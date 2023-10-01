@@ -17,7 +17,9 @@ int main(int nargs, char** vargs){
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout <<"Laberinto Solucion cola:"<< std::endl;
+	Cords* ponter2 = laberinto.solve_cola(0,0,21,21);
 	std::cout << std::endl;
+	laberinto.print_solved(ponter2);
 	//laberinto.solve_cola(0,0,21,21);
 	std::cout << std::endl;
 	std::cout << std::endl;
