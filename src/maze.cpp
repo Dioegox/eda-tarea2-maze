@@ -318,11 +318,26 @@ Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
 			}
 		}
 	}
-
+	// reviso si efectivamente llego al final
+	int flg= 0;
+	for(int i=0; i<counter; i++){
+		if(visitados[i].x == f2-1 && visitados[i].y == c2-1){
+			flg=1;
+		}
+	}
+	if(flg==0){
+		int sizec = 0;
+		Cords* respuesta = new Cords[1];
+		cordenada_actual.x = 0;
+		respuesta[0] = cordenada_actual;
+		return respuesta;
+		
+	}
+	
 	std::stack<Cords> pila;
 	std::stack<Cords> pila2;
 	int in = 0;
-	int flg= 0;
+	flg=0;
 	// copio la lista a una pila
 	while(flg==0){
 		pila.push(visitados[in]);
