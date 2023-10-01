@@ -20,7 +20,6 @@ int main(int nargs, char** vargs){
 	Cords* ponter2 = laberinto.solve_cola(0,0,21,21);
 	std::cout << std::endl;
 	laberinto.print_solved(ponter2);
-	//laberinto.solve_cola(0,0,21,21);
 	std::cout << std::endl;
 	std::cout << std::endl;
 

@@ -340,10 +340,8 @@ Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
 		flg=0;
 		if (flg==0){
 			if(pila.top().x==cordenada_actual.x+1 && pila.top().y==cordenada_actual.y){
-				//std::cout <<"i"<< pila2.top().x << "," << pila2.top().y << std::endl;
 				cordenada_actual=pila.top();
 				pila2.push(cordenada_actual);
-				//std::cout <<"f"<< pila2.top().x << "," << pila2.top().y << std::endl;
 				flg=1;
 			}
 		}
@@ -379,20 +377,6 @@ Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
         respuesta[i] = pila2.top();
 		pila2.pop();
     }
-
-/* 	in= pila2.size();
-	std::cout <<"debug start"<< std::endl;
-	for(int i=0; i< in-1; i++){
-		std::cout << pila2.top().x << "," << pila2.top().y << std::endl;
-		pila2.pop();
-
-	}
-	std::cout << "asguihi" << std::endl;
-	for(int i=0; i< counter; i++){
-		std::cout << visitados[i].x << "," << visitados[i].y << std::endl;
-	}
-	std::cout <<"pila size "<< pila2.size() << ", counter " << counter << std::endl;
-	std::cout <<"debug stop"<< std::endl; */
 	return respuesta;
 }
 
@@ -567,9 +551,6 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
         respuesta[i] = pila_solucion.top();
         pila_solucion.pop();
     }
-
-	std::cout << "inicio debugging" << std::endl;
-
 
 	return respuesta;
 }
