@@ -4,6 +4,8 @@
 #include <iostream>
 #include <stack>
 #include <queue>
+#include <random>
+#include <algorithm>
 
 namespace maze{
 
@@ -182,10 +184,216 @@ void Maze::print_solved(Cords* solution){
 	}
 
 }
+void Maze::shuffle(int arr[], int size){
+	for(int i = size - 1; i > 0; i--){
+		int j = std::rand () % (i+1);
+		int temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+}
 
 Cords* Maze::solve_cola(int f1, int c1, int f2, int c2){
-	
-	return 0;
+	std::queue<Cords> cola_solucion;
+	int finish = 1;
+	int counter = 1;
+	int visitado;
+	int total = height*width;
+	Cords cordenada_actual;
+	cordenada_actual.x = f1;
+  	cordenada_actual.y = c1;
+
+	Cords cordenada_revisar;
+	cordenada_revisar.x = -1;
+  	cordenada_revisar.y = -1;
+
+	Cords visitados[total];
+	for (int i=0;i<total;i++){
+		visitados[i] = cordenada_revisar;
+	}
+
+	int values[] = {0,1,2,3};
+	int size = 4;
+	int ident = 0;
+	cola_solucion.push(cordenada_actual);
+	visitados[0] = cordenada_actual;
+
+	while(finish){
+		//revisa que no sea el final
+		if (cordenada_actual.x == f2-1 && cordenada_actual.y == c2-1){
+			finish = 0;
+		}
+
+		else{
+			shuffle(values, size);
+			//añade todas las coordenadas vacias no revisadas a la cola y la lista de forma aleatoria
+			for(int a=0; a<4; a++){
+				ident = values[a];
+
+				if (ident == 0){
+					if (cordenada_actual.x > 0){
+						cordenada_revisar.x = cordenada_actual.x - 1;
+						cordenada_revisar.y = cordenada_actual.y;
+						if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
+							visitado = 0;
+							for (int i=0;i<=counter;i++){
+								if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+									visitado = 1;
+								}
+							}
+							if (visitado == 0){
+								cola_solucion.push(cordenada_revisar);
+								visitados[counter] = cordenada_revisar;
+								counter++;
+							}
+						}
+					}
+				}
+				if (ident == 1){
+					if (cordenada_actual.x < width - 1){
+						cordenada_revisar.x = cordenada_actual.x + 1;
+						cordenada_revisar.y = cordenada_actual.y;
+						if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
+							visitado = 0;
+							for (int i=0;i<=counter;i++){
+								if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+									visitado = 1;
+								}
+							}
+							if (visitado == 0){
+								cola_solucion.push(cordenada_revisar);
+								visitados[counter] = cordenada_revisar;
+								counter++;
+							}
+						}
+					}
+				}
+				if (ident == 2){
+					if (cordenada_actual.y > 0){
+						cordenada_revisar.x = cordenada_actual.x;
+						cordenada_revisar.y = cordenada_actual.y - 1;
+						if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
+							visitado = 0;
+							for (int i=0;i<=counter;i++){
+								if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+									visitado = 1;
+								}
+							}
+							if (visitado == 0){
+								cola_solucion.push(cordenada_revisar);
+								visitados[counter] = cordenada_revisar;
+								counter++;
+							}
+						}
+					}
+				}
+				if (ident == 3){
+					if (cordenada_actual.y < height - 1){
+						cordenada_revisar.x = cordenada_actual.x;
+						cordenada_revisar.y = cordenada_actual.y + 1;
+						if (grid[cordenada_revisar.y][cordenada_revisar.x] == 0) {
+							visitado = 0;
+							for (int i=0;i<=counter;i++){
+								if (visitados[i].x == cordenada_revisar.x && visitados[i].y == cordenada_revisar.y){
+									visitado = 1;
+								}
+							}
+							if (visitado == 0){
+								cola_solucion.push(cordenada_revisar);
+								visitados[counter] = cordenada_revisar;
+								counter++;
+							}
+						}
+					}
+				}
+			}
+			// avanza al siguiente elemento de la cola siempre que esta no este vacia
+			cola_solucion.pop();
+			if (cola_solucion.empty()){
+				finish = 0;
+			}
+			else{
+				cordenada_actual = cola_solucion.front();
+			
+			}
+		}
+	}
+
+	std::stack<Cords> pila;
+	std::stack<Cords> pila2;
+	int in = 0;
+	int flg= 0;
+	// copio la lista a una pila
+	while(flg==0){
+		pila.push(visitados[in]);
+		in++;
+		if(visitados[in].x == f2-1 && visitados[in].y == c2-1){
+			pila.push(visitados[in]);
+			flg=1;
+		}
+	}
+	cordenada_actual=pila.top();
+	pila.pop();
+	pila2.push(cordenada_actual);
+	// añado a la segunda pila solo las coordenadas aledañas a la coordenada anterior
+	while(pila.size()>0){
+		flg=0;
+		if (flg==0){
+			if(pila.top().x==cordenada_actual.x+1 && pila.top().y==cordenada_actual.y){
+				//std::cout <<"i"<< pila2.top().x << "," << pila2.top().y << std::endl;
+				cordenada_actual=pila.top();
+				pila2.push(cordenada_actual);
+				//std::cout <<"f"<< pila2.top().x << "," << pila2.top().y << std::endl;
+				flg=1;
+			}
+		}
+		if (flg==0){
+			if(pila.top().x==cordenada_actual.x-1 && pila.top().y==cordenada_actual.y){
+				cordenada_actual=pila.top();
+				pila2.push(cordenada_actual);
+				flg=1;
+			}
+		}
+		if (flg==0){
+			if(pila.top().x==cordenada_actual.x && pila.top().y==cordenada_actual.y+1){
+				cordenada_actual=pila.top();
+				pila2.push(cordenada_actual);
+				flg=1;
+			}
+		}
+		if (flg==0){
+			if(pila.top().x==cordenada_actual.x && pila.top().y==cordenada_actual.y-1){
+				cordenada_actual=pila.top();
+				pila2.push(cordenada_actual);
+				flg=1;
+			}
+		}
+		pila.pop();
+	}
+
+	int sizec = pila2.size();
+    Cords* respuesta = new Cords[sizec + 1];
+	cordenada_actual.x = sizec;
+	respuesta[0] = cordenada_actual;
+    for (int i = 1; i< sizec+1; i++){
+        respuesta[i] = pila2.top();
+		pila2.pop();
+    }
+
+/* 	in= pila2.size();
+	std::cout <<"debug start"<< std::endl;
+	for(int i=0; i< in-1; i++){
+		std::cout << pila2.top().x << "," << pila2.top().y << std::endl;
+		pila2.pop();
+
+	}
+	std::cout << "asguihi" << std::endl;
+	for(int i=0; i< counter; i++){
+		std::cout << visitados[i].x << "," << visitados[i].y << std::endl;
+	}
+	std::cout <<"pila size "<< pila2.size() << ", counter " << counter << std::endl;
+	std::cout <<"debug stop"<< std::endl; */
+	return respuesta;
 }
 
 Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
@@ -360,6 +568,11 @@ Cords* Maze::solve_pila(int f1, int c1, int f2, int c2){
         pila_solucion.pop();
     }
 
+	std::cout << "inicio debugging" << std::endl;
+
+
 	return respuesta;
 }
+
+
 }
