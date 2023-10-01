@@ -24,5 +24,6 @@ int main(int nargs, char** vargs){
 	std::cout << std::endl;
 
 	delete ponter;
+	delete ponter2;
 	return 0;
 }
